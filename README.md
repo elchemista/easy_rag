@@ -1,4 +1,4 @@
-# Rag Go Semplify
+# Rag Go Simplified
 
 ## Prerequisite
 
