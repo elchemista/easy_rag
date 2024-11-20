@@ -12,7 +12,7 @@ const (
 	APIVersion = "v1"
 )
 
-func StartServer(e *echo.Echo, llm *rag.Rag) {
+func StartServer(e *echo.Echo, rag *rag.Rag) {
 	e.POST(fmt.Sprintf("/api/%s/upload", APIVersion), func(c echo.Context) error {
 		return c.String(200, "Hello, World!")
 	})
@@ -20,5 +20,5 @@ func StartServer(e *echo.Echo, llm *rag.Rag) {
 		return c.String(200, "Hello, World!")
 	})
 
-	e.Logger.Fatal(e.Start(":1323"))
+	e.Logger.Fatal(e.Start(":4002"))
 }

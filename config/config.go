@@ -22,7 +22,7 @@ type Config struct {
 }
 
 func NewConfig() Config {
-	config := Config{}
+	config := Config{MilvusHost: "localhost:19530"}
 	cfg.ParseEnv(&config)
 	return config
 }

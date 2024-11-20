@@ -7,15 +7,15 @@ import (
 )
 
 type Rag struct {
-	llm        llm.LLMService
-	embeddings embeddings.EmbeddingsService
-	database   database.Database
+	LLM        llm.LLMService
+	Embeddings embeddings.EmbeddingsService
+	Database   database.Database
 }
 
 func NewRag(llm llm.LLMService, embeddings embeddings.EmbeddingsService, database database.Database) *Rag {
 	return &Rag{
-		llm:        llm,
-		embeddings: embeddings,
-		database:   database,
+		LLM:        llm,
+		Embeddings: embeddings,
+		Database:   database,
 	}
 }

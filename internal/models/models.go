@@ -9,6 +9,7 @@ type Document struct {
 	Category       []string          `json:"category"`        // Category of the document
 	EmbeddingModel string            `json:"embedding_model"` // Embedding model used to generate the embedding
 	Summary        string            `json:"summary"`         // Summary of the document
+	Vector         []float32         `json:"vector"`          // The embedding vector
 	Metadata       map[string]string `json:"metadata"`        // Additional metadata (e.g., author, timestamp)
 }
 
@@ -16,7 +17,7 @@ type Document struct {
 type Embedding struct {
 	ID         string    `json:"id"`          // Unique identifier
 	DocumentID string    `json:"document_id"` // Unique identifier linked to a Document
-	Vector     []float64 `json:"vector"`      // The embedding vector
+	Vector     []float32 `json:"vector"`      // The embedding vector
 	TextChunk  string    `json:"text_chunk"`  // Text chunk of the document
 	Dimension  int       `json:"dimension"`   // Dimensionality of the vector
 	Order      int       `json:"order"`       // Order of the embedding to build the content back
