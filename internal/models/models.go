@@ -6,7 +6,7 @@ type Document struct {
 	Content        string            `json:"content"`         // Text content of the document become chunks of data will not be saved
 	Link           string            `json:"link"`            // Link to the document
 	Filename       string            `json:"filename"`        // Filename of the document
-	Category       []string          `json:"category"`        // Category of the document
+	Category       string            `json:"category"`        // Category of the document
 	EmbeddingModel string            `json:"embedding_model"` // Embedding model used to generate the embedding
 	Summary        string            `json:"summary"`         // Summary of the document
 	Vector         []float32         `json:"vector"`          // The embedding vector

@@ -20,5 +20,10 @@ func StartServer(e *echo.Echo, rag *rag.Rag) {
 		return c.String(200, "Hello, World!")
 	})
 
+	// result, err := rag.Database.ListDocuments()
+
+	// log.Printf("result: %v", result)
+	// log.Println(err)
+
 	e.Logger.Fatal(e.Start(":4002"))
 }

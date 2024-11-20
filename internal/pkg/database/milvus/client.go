@@ -116,6 +116,16 @@ func (m *Client) EnsureCollections(ctx context.Context) error {
 		log.Printf("Index created on field '%s' for collection '%s'", collection.IndexField, collection.Name)
 	}
 
+	err := m.Instance.LoadCollection(ctx, "documents", false)
+	if err != nil {
+		log.Fatalf("failed to load collection, err: %v", err)
+	}
+
+	err = m.Instance.LoadCollection(ctx, "chunks", false)
+	if err != nil {
+		log.Fatalf("failed to load collection, err: %v", err)
+	}
+
 	return nil
 }
 

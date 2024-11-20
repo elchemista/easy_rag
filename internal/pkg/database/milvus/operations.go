@@ -7,6 +7,7 @@ import (
 
 	"github.com/elchemista/easy_rag/internal/models"
 
+	"github.com/milvus-io/milvus-sdk-go/v2/client"
 	"github.com/milvus-io/milvus-sdk-go/v2/entity"
 )
 
@@ -75,8 +76,12 @@ func (m *Client) GetDocumentByID(ctx context.Context, id string) (map[string]int
 		return nil, fmt.Errorf("document with ID '%s' not found", id)
 	}
 
-	fmt.Println(results)
-	return map[string]interface{}{}, nil
+	mp, err := transformResultSet(results, "ID", "Content", "Link", "Filename", "Category", "EmbeddingModel", "Summary", "Metadata")
+
+	// convert metadata to map
+	mp[0]["Metadata"] = convertToMetadata(mp[0]["Metadata"].(string))
+
+	return mp[0], err
 }
 
 // GetEmbeddingByID retrieves an embedding from the "chunks" collection by ID.
@@ -94,8 +99,56 @@ func (m *Client) GetEmbeddingByID(ctx context.Context, id string) (map[string]in
 		return nil, fmt.Errorf("embedding with ID '%s' not found", id)
 	}
 
-	fmt.Println(results)
-	return map[string]interface{}{}, nil
+	mp, err := transformResultSet(results, "ID", "DocumentID", "TextChunk", "Order")
+
+	return mp[0], err
+}
+
+// GetAllDocuments retrieves all documents from the "documents" collection.
+func (m *Client) GetAllDocuments(ctx context.Context) ([]map[string]interface{}, error) {
+	collectionName := "documents"
+	projections := []string{"*"} // Fetch all fields
+	expr := ""
+
+	rs, err := m.Instance.Query(ctx, collectionName, nil, expr, projections, client.WithLimit(1000))
+	if err != nil {
+		return nil, fmt.Errorf("failed to query all documents: %w", err)
+	}
+
+	if len(rs) == 0 {
+		return nil, fmt.Errorf("no documents found in the collection")
+	}
+
+	results, err := transformResultSet(rs, "ID", "Content", "Link", "Filename", "Category", "EmbeddingModel", "Summary", "Metadata")
+
+	if err != nil {
+		return nil, fmt.Errorf("failed to query all documents: %w", err)
+	}
+
+	// convert metadata to map
+	for i := range results {
+		results[i]["Metadata"] = convertToMetadata(results[i]["Metadata"].(string))
+	}
+
+	return results, nil
+}
+
+// GetAllEmbeddingByDocID retrieves all embeddings linked to a specific DocumentID from the "chunks" collection.
+func (m *Client) GetAllEmbeddingByDocID(ctx context.Context, documentID string) ([]map[string]interface{}, error) {
+	collectionName := "chunks"
+	projections := []string{"*"} // Fetch all fields
+	expr := fmt.Sprintf("DocumentID == '%s'", documentID)
+
+	results, err := m.Instance.Query(ctx, collectionName, nil, expr, projections)
+	if err != nil {
+		return nil, fmt.Errorf("failed to query embeddings by DocumentID: %w", err)
+	}
+
+	if len(results) == 0 {
+		return nil, fmt.Errorf("no embeddings found for DocumentID '%s'", documentID)
+	}
+
+	return transformResultSet(results, "ID", "DocumentID", "TextChunk", "Order")
 }
 
 // DeleteDocument deletes a document from the "documents" collection by ID.
@@ -190,6 +243,12 @@ func extractMetadata(docs []models.Document) []string {
 	return metadata
 }
 
+func convertToMetadata(metadata string) map[string]string {
+	var metadataMap map[string]string
+	json.Unmarshal([]byte(metadata), &metadataMap)
+	return metadataMap
+}
+
 func extractContents(docs []models.Document) []string {
 	contents := make([]string, len(docs))
 	for i, doc := range docs {
@@ -260,4 +319,63 @@ func extractOrders(embeddings []models.Embedding) []int32 {
 		orders[i] = int32(embedding.Order)
 	}
 	return orders
+}
+
+func transformResultSet(rs client.ResultSet, outputFields ...string) ([]map[string]interface{}, error) {
+	if rs == nil || rs.Len() == 0 {
+		return nil, fmt.Errorf("empty result set")
+	}
+
+	var results []map[string]interface{}
+
+	for i := 0; i < rs.Len(); i++ { // Iterate through rows
+		row := make(map[string]interface{})
+
+		for _, fieldName := range outputFields {
+			column := rs.GetColumn(fieldName)
+			if column == nil {
+				return nil, fmt.Errorf("column %s does not exist in result set", fieldName)
+			}
+
+			switch column.Type() {
+			case entity.FieldTypeInt64:
+				value, err := column.GetAsInt64(i)
+				if err != nil {
+					return nil, fmt.Errorf("error getting int64 value for column %s, row %d: %w", fieldName, i, err)
+				}
+				row[fieldName] = value
+
+			case entity.FieldTypeFloat:
+				value, err := column.GetAsDouble(i)
+				if err != nil {
+					return nil, fmt.Errorf("error getting float value for column %s, row %d: %w", fieldName, i, err)
+				}
+				row[fieldName] = value
+
+			case entity.FieldTypeDouble:
+				value, err := column.GetAsDouble(i)
+				if err != nil {
+					return nil, fmt.Errorf("error getting double value for column %s, row %d: %w", fieldName, i, err)
+				}
+				row[fieldName] = value
+
+			case entity.FieldTypeVarChar:
+				value, err := column.GetAsString(i)
+				if err != nil {
+					return nil, fmt.Errorf("error getting string value for column %s, row %d: %w", fieldName, i, err)
+				}
+				row[fieldName] = value
+
+			case entity.FieldTypeFloatVector:
+				row[fieldName] = []float32{}
+
+			default:
+				return nil, fmt.Errorf("unsupported field type for column %s", fieldName)
+			}
+		}
+
+		results = append(results, row)
+	}
+
+	return results, nil
 }
