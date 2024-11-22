@@ -8,7 +8,6 @@ import (
 	"github.com/elchemista/easy_rag/internal/llm"
 	"github.com/elchemista/easy_rag/internal/pkg/rag"
 	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
 )
 
 // Rag is the main struct for the rag application
@@ -16,18 +15,19 @@ import (
 func main() {
 	cfg := config.NewConfig()
 
-	// Echo instance
-	e := echo.New()
-
-	// Middleware
-	e.Use(middleware.Logger())
-	e.Use(middleware.Recover())
-
 	llm := llm.NewOpenAI(cfg.OpenAIAPIKey, cfg.OpenAIEndpoint, cfg.OpenAIModel)
-	embeddings := embeddings.NewOpenAIEmbeddings(cfg.OpenAIEmbeddingAPIKey, cfg.OpenAIEmbeddingEndpoint, cfg.OpenAIEmbeddingModel)
+	embeddings := embeddings.NewOllamaEmbeddings(cfg.OllamaEmbeddingEndpoint, cfg.OllamaEmbeddingModel)
 	database := database.NewMilvus(cfg.MilvusHost)
 
+	// Rag instance
 	rag := rag.NewRag(llm, embeddings, database)
 
-	api.StartServer(e, rag)
+	// Echo WebServer instance
+	e := echo.New()
+
+	// Wrapper for API
+	api.NewAPI(e, rag)
+
+	// Start Server
+	e.Logger.Fatal(e.Start(":4002"))
 }

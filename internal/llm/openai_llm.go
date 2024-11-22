@@ -18,3 +18,7 @@ func (o *OpenAI) Generate(prompt string) (string, error) {
 	return "", nil
 	// TODO: implement
 }
+
+func (o *OpenAI) GetModel() string {
+	return o.Model
+}

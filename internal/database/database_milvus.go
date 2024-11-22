@@ -1,7 +1,10 @@
 package database
 
 import (
+	"bytes"
 	"context"
+	"fmt"
+	"sort"
 
 	"github.com/elchemista/easy_rag/internal/models"
 	"github.com/elchemista/easy_rag/internal/pkg/database/milvus"
@@ -29,30 +32,16 @@ func NewMilvus(host string) *Milvus {
 func (m *Milvus) SaveDocument(document models.Document) error {
 	// for now lets use context background
 	ctx := context.Background()
-	err := m.Client.EnsureCollections(ctx)
-	if err != nil {
-		return err
-	}
-	err = m.Client.InsertDocuments(ctx, []models.Document{document})
-	if err != nil {
-		return err
-	}
-	return nil
+
+	return m.Client.InsertDocuments(ctx, []models.Document{document})
+}
+
+func (m *Milvus) SaveEmbeddings(embeddings []models.Embedding) error {
+	ctx := context.Background()
+	return m.Client.InsertEmbeddings(ctx, embeddings)
 }
 
 func (m *Milvus) GetDocumentInfo(id string) (models.Document, error) {
-	ctx := context.Background()
-	docs, err := m.Client.GetDocumentByID(ctx, id)
-	if err != nil {
-		return models.Document{}, err
-	}
-	if len(docs) == 0 {
-		return models.Document{}, nil
-	}
-	return models.Document{}, nil
-}
-
-func (m *Milvus) GetDocument(id string) (models.Document, error) {
 	ctx := context.Background()
 	doc, err := m.Client.GetDocumentByID(ctx, id)
 
@@ -65,7 +54,6 @@ func (m *Milvus) GetDocument(id string) (models.Document, error) {
 	}
 	return models.Document{
 		ID:             doc["ID"].(string),
-		Content:        doc["Content"].(string),
 		Link:           doc["Link"].(string),
 		Filename:       doc["Filename"].(string),
 		Category:       doc["Category"].(string),
@@ -75,30 +63,67 @@ func (m *Milvus) GetDocument(id string) (models.Document, error) {
 	}, nil
 }
 
-func (m *Milvus) Search(content string) ([]models.Embedding, error) {
-	return nil, nil
+func (m *Milvus) GetDocument(id string) (models.Document, error) {
+	ctx := context.Background()
+	doc, err := m.Client.GetDocumentByID(ctx, id)
+	if err != nil {
+		return models.Document{}, err
+	}
+
+	embeds, err := m.Client.GetAllEmbeddingByDocID(ctx, id)
+
+	if err != nil {
+		return models.Document{}, err
+	}
+
+	// order embed by order
+	sort.Slice(embeds, func(i, j int) bool {
+		return embeds[i].Order < embeds[j].Order
+	})
+
+	// concatenate text chunks
+	var buf bytes.Buffer
+	for _, embed := range embeds {
+		buf.WriteString(embed.TextChunk)
+	}
+
+	textChunks := buf.String()
+
+	if len(doc) == 0 {
+		return models.Document{}, nil
+	}
+	return models.Document{
+		ID:             doc["ID"].(string),
+		Content:        textChunks,
+		Link:           doc["Link"].(string),
+		Filename:       doc["Filename"].(string),
+		Category:       doc["Category"].(string),
+		EmbeddingModel: doc["EmbeddingModel"].(string),
+		Summary:        doc["Summary"].(string),
+		Metadata:       doc["Metadata"].(map[string]string),
+	}, nil
+}
+
+func (m *Milvus) Search(vector [][]float32) ([]models.Embedding, error) {
+	ctx := context.Background()
+	results, err := m.Client.Search(ctx, vector, 10)
+	if err != nil {
+		return nil, err
+	}
+
+	return results, nil
 }
 
 func (m *Milvus) ListDocuments() ([]models.Document, error) {
 	ctx := context.Background()
+
 	docs, err := m.Client.GetAllDocuments(ctx)
+
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to get docs: %w", err)
 	}
-	var documents []models.Document
-	for _, doc := range docs {
-		documents = append(documents, models.Document{
-			ID:             doc["ID"].(string),
-			Content:        doc["Content"].(string),
-			Link:           doc["Link"].(string),
-			Filename:       doc["Filename"].(string),
-			Category:       doc["Category"].(string),
-			EmbeddingModel: doc["EmbeddingModel"].(string),
-			Summary:        doc["Summary"].(string),
-			Metadata:       doc["Metadata"].(map[string]string),
-		})
-	}
-	return documents, nil
+
+	return docs, nil
 }
 
 func (m *Milvus) DeleteDocument(id string) error {

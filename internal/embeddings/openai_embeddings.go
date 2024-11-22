@@ -14,6 +14,10 @@ func NewOpenAIEmbeddings(apiKey string, endpoint string, model string) *OpenAIEm
 	}
 }
 
-func (o *OpenAIEmbeddings) Generate(text string) ([]float64, error) {
+func (o *OpenAIEmbeddings) Vectorize(text string) ([]float32, error) {
 	return nil, nil
+}
+
+func (o *OpenAIEmbeddings) GetModel() string {
+	return o.Model
 }

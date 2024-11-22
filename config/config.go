@@ -22,7 +22,11 @@ type Config struct {
 }
 
 func NewConfig() Config {
-	config := Config{MilvusHost: "localhost:19530"}
+	config := Config{
+		MilvusHost:              "localhost:19530",
+		OllamaEmbeddingEndpoint: "http://localhost:11434",
+		OllamaEmbeddingModel:    "bge-m3",
+	}
 	cfg.ParseEnv(&config)
 	return config
 }

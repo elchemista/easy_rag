@@ -52,7 +52,7 @@ func (m *Client) EnsureCollections(ctx context.Context) error {
 			IndexField: "Vector", // Indexing the Vector field for similarity search
 			IndexType:  "IVF_FLAT",
 			MetricType: entity.L2,
-			Nlist:      128, // Number of clusters for IVF_FLAT index
+			Nlist:      10, // Number of clusters for IVF_FLAT index
 		},
 		{
 			Name:       "chunks",
@@ -60,11 +60,17 @@ func (m *Client) EnsureCollections(ctx context.Context) error {
 			IndexField: "Vector", // Indexing the Vector field for similarity search
 			IndexType:  "IVF_FLAT",
 			MetricType: entity.L2,
-			Nlist:      128,
+			Nlist:      10,
 		},
 	}
 
 	for _, collection := range collections {
+		// drop collection
+		// err := m.Instance.DropCollection(ctx, collection.Name)
+		// if err != nil {
+		// 	return fmt.Errorf("failed to drop collection '%s': %w", collection.Name, err)
+		// }
+
 		// Ensure the collection exists
 		exists, err := m.Instance.HasCollection(ctx, collection.Name)
 		if err != nil {

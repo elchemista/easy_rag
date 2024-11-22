@@ -4,4 +4,5 @@ package llm
 type LLMService interface {
 	// generate text from prompt
 	Generate(prompt string) (string, error)
+	GetModel() string
 }
