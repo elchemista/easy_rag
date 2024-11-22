@@ -26,6 +26,8 @@ func NewConfig() Config {
 		MilvusHost:              "localhost:19530",
 		OllamaEmbeddingEndpoint: "http://localhost:11434",
 		OllamaEmbeddingModel:    "bge-m3",
+		OllamaEndpoint:          "http://localhost:11434/api/chat",
+		OllamaModel:             "llama3.2:3b",
 	}
 	cfg.ParseEnv(&config)
 	return config

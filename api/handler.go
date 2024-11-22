@@ -2,6 +2,7 @@ package api
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/elchemista/easy_rag/internal/models"
@@ -34,79 +35,116 @@ type ResposeQuestion struct {
 }
 
 func UploadHandler(c echo.Context) error {
-	// upload json list of models.document
+	// Retrieve the RAG instance from context
 	rag := c.Get("Rag").(*rag.Rag)
 
 	var request RequestUpload
-	err := c.Bind(&request)
-
-	if err != nil {
+	if err := c.Bind(&request); err != nil {
 		return ErrorHandler(err, c)
 	}
 
-	var docs []models.Document
-	for _, doc := range request.Docs {
-		chunks := textprocessor.CreateChunks(doc.Content)
-		summary_chunks := textprocessor.ConcatenateStrings(chunks[:4])
+	// Generate a unique task ID
+	taskID := uuid.NewString()
 
-		summary, err := rag.LLM.Generate(summary_chunks)
+	// Launch the upload process in a separate goroutine
+	go func(taskID string, request RequestUpload) {
+		log.Printf("Task %s: started processing", taskID)
+		defer log.Printf("Task %s: completed processing", taskID)
 
-		if err != nil {
-			return ErrorHandler(err, c)
-		}
+		var docs []models.Document
 
-		vectorSum, err := rag.Embeddings.Vectorize(summary)
+		for idx, doc := range request.Docs {
+			// Generate a unique ID for each document
+			docID := uuid.NewString()
+			log.Printf("Task %s: processing document %d with generated ID %s (filename: %s)", taskID, idx, docID, doc.Filename)
 
-		if err != nil {
-			return ErrorHandler(err, c)
-		}
+			// Step 1: Create chunks from document content
+			chunks := textprocessor.CreateChunks(doc.Content)
+			log.Printf("Task %s: created %d chunks for document %s", taskID, len(chunks), docID)
 
-		document := models.Document{
-			ID:             uuid.NewString(),
-			Content:        "",
-			Link:           doc.Link,
-			Filename:       doc.Filename,
-			Category:       doc.Category,
-			EmbeddingModel: rag.Embeddings.GetModel(),
-			Summary:        summary,
-			Vector:         vectorSum[0],
-			Metadata:       doc.Metadata,
-		}
-
-		err = rag.Database.SaveDocument(document)
-
-		if err != nil {
-			return ErrorHandler(err, c)
-		}
-
-		var embeddings []models.Embedding
-		for order, chunk := range chunks {
-			vectorEmbedding, err := rag.Embeddings.Vectorize(chunk)
-			if err != nil {
-				return ErrorHandler(err, c)
+			// Step 2: Generate summary for the document
+			var summaryChunks string
+			if len(chunks) < 4 {
+				summaryChunks = doc.Content
+			} else {
+				summaryChunks = textprocessor.ConcatenateStrings(chunks[:3])
 			}
 
-			embeddings = append(embeddings, models.Embedding{
-				ID:         uuid.NewString(),
-				DocumentID: document.ID,
-				Vector:     vectorEmbedding[0],
-				TextChunk:  chunk,
-				Dimension:  int64(1024),
-				Order:      int64(order),
-			})
+			log.Printf("Task %s: generating summary for document %s", taskID, docID)
+			summary, err := rag.LLM.Generate(fmt.Sprintf("Give me only summary of the following text: %s", summaryChunks))
+			if err != nil {
+				log.Printf("Task %s: error generating summary for document %s: %v", taskID, docID, err)
+				return
+			}
+			log.Printf("Task %s: generated summary for document %s", taskID, docID)
+
+			// Step 3: Vectorize the summary
+			log.Printf("Task %s: vectorizing summary for document %s", taskID, docID)
+			vectorSum, err := rag.Embeddings.Vectorize(summary)
+			if err != nil {
+				log.Printf("Task %s: error vectorizing summary for document %s: %v", taskID, docID, err)
+				return
+			}
+			log.Printf("Task %s: vectorized summary for document %s", taskID, docID)
+
+			// Step 4: Save the document
+			document := models.Document{
+				ID:             docID, // Use generated ID
+				Content:        "",
+				Link:           doc.Link,
+				Filename:       doc.Filename,
+				Category:       doc.Category,
+				EmbeddingModel: rag.Embeddings.GetModel(),
+				Summary:        summary,
+				Vector:         vectorSum[0],
+				Metadata:       doc.Metadata,
+			}
+			log.Printf("Task %s: saving document %s", taskID, docID)
+			if err := rag.Database.SaveDocument(document); err != nil {
+				log.Printf("Task %s: error saving document %s: %v", taskID, docID, err)
+				return
+			}
+			log.Printf("Task %s: saved document %s", taskID, docID)
+
+			// Step 5: Process and save embeddings for each chunk
+			var embeddings []models.Embedding
+			for order, chunk := range chunks {
+				log.Printf("Task %s: vectorizing chunk %d for document %s", taskID, order, docID)
+				vectorEmbedding, err := rag.Embeddings.Vectorize(chunk)
+				if err != nil {
+					log.Printf("Task %s: error vectorizing chunk %d for document %s: %v", taskID, order, docID, err)
+					return
+				}
+				log.Printf("Task %s: vectorized chunk %d for document %s", taskID, order, docID)
+
+				embedding := models.Embedding{
+					ID:         uuid.NewString(),
+					DocumentID: docID,
+					Vector:     vectorEmbedding[0],
+					TextChunk:  chunk,
+					Dimension:  int64(1024),
+					Order:      int64(order),
+				}
+				embeddings = append(embeddings, embedding)
+			}
+
+			log.Printf("Task %s: saving %d embeddings for document %s", taskID, len(embeddings), docID)
+			if err := rag.Database.SaveEmbeddings(embeddings); err != nil {
+				log.Printf("Task %s: error saving embeddings for document %s: %v", taskID, docID, err)
+				return
+			}
+			log.Printf("Task %s: saved embeddings for document %s", taskID, docID)
+
+			docs = append(docs, document)
 		}
+	}(taskID, request)
 
-		err = rag.Database.SaveEmbeddings(embeddings)
-		if err != nil {
-			return ErrorHandler(err, c)
-		}
-
-		docs = append(docs, document)
-	}
-
-	return c.JSON(http.StatusOK, map[string]interface{}{
-		"version": APIVersion,
-		"docs":    docs,
+	// Return the task ID and expected completion time
+	return c.JSON(http.StatusAccepted, map[string]interface{}{
+		"version":       APIVersion,
+		"task_id":       taskID,
+		"expected_time": "10m",
+		"status":        "Processing started",
 	})
 }
 
@@ -157,26 +195,49 @@ func AskDocHandler(c echo.Context) error {
 		return ErrorHandler(err, c)
 	}
 
-	var chunks []string
-	for _, embedding := range embeddings {
-		chunks = append(chunks, embedding.TextChunk)
+	if len(embeddings) == 0 {
+		return c.JSON(http.StatusOK, map[string]interface{}{
+			"version": APIVersion,
+			"docs":    nil,
+			"answer":  "Don't found any relevant documents",
+		})
 	}
 
-	answer, err := rag.LLM.Generate(fmt.Sprintf("Given the following information: %s \nAnswer the question: %s", textprocessor.ConcatenateStrings(chunks), request.Question))
+	answer, err := rag.LLM.Generate(fmt.Sprintf("Given the following information: %s \nAnswer the question: %s", embeddings[0].TextChunk, request.Question))
 
 	if err != nil {
 		return ErrorHandler(err, c)
 	}
 
-	docs := make([]string, len(embeddings))
-	for i, embedding := range embeddings {
-		docs[i] = embedding.DocumentID
+	// Use a map to track unique DocumentIDs
+	docSet := make(map[string]struct{})
+	for _, embedding := range embeddings {
+		docSet[embedding.DocumentID] = struct{}{}
+	}
+
+	// Convert the map keys to a slice
+	docs := make([]string, 0, len(docSet))
+	for docID := range docSet {
+		docs = append(docs, docID)
 	}
 
 	return c.JSON(http.StatusOK, map[string]interface{}{
 		"version": APIVersion,
 		"docs":    docs,
 		"answer":  answer,
+	})
+}
+
+func DeleteDocHandler(c echo.Context) error {
+	rag := c.Get("Rag").(*rag.Rag)
+	id := c.Param("id")
+	err := rag.Database.DeleteDocument(id)
+	if err != nil {
+		return ErrorHandler(err, c)
+	}
+	return c.JSON(http.StatusOK, map[string]interface{}{
+		"version": APIVersion,
+		"docs":    nil,
 	})
 }
 

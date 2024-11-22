@@ -15,7 +15,7 @@ import (
 func main() {
 	cfg := config.NewConfig()
 
-	llm := llm.NewOpenAI(cfg.OpenAIAPIKey, cfg.OpenAIEndpoint, cfg.OpenAIModel)
+	llm := llm.NewOllama(cfg.OllamaEndpoint, cfg.OllamaModel)
 	embeddings := embeddings.NewOllamaEmbeddings(cfg.OllamaEmbeddingEndpoint, cfg.OllamaEmbeddingModel)
 	database := database.NewMilvus(cfg.MilvusHost)
 

@@ -20,6 +20,16 @@ func NewOllama(endpoint string, model string) *Ollama {
 	}
 }
 
+// Response represents the structure of the expected response from the API.
+type Response struct {
+	Model     string `json:"model"`
+	CreatedAt string `json:"created_at"`
+	Message   struct {
+		Role    string `json:"role"`
+		Content string `json:"content"`
+	} `json:"message"`
+}
+
 // Generate sends a prompt to the Ollama endpoint and returns the response
 func (o *Ollama) Generate(prompt string) (string, error) {
 	// Create the request payload
@@ -57,19 +67,14 @@ func (o *Ollama) Generate(prompt string) (string, error) {
 		return "", fmt.Errorf("API returned error: %s", string(body))
 	}
 
-	// Unmarshal the response into a map to extract content
-	var response map[string]interface{}
+	// Unmarshal the response into a predefined structure
+	var response Response
 	if err := json.Unmarshal(body, &response); err != nil {
 		return "", fmt.Errorf("failed to unmarshal response: %w", err)
 	}
 
-	// Extract and return the content from the response
-	if content, ok := response["content"].(string); ok {
-		return content, nil
-	}
-
-	return "", fmt.Errorf("unexpected response format: %s", string(body))
-
+	// Extract and return the content from the nested structure
+	return response.Message.Content, nil
 }
 
 func (o *Ollama) GetModel() string {

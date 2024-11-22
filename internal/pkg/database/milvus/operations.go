@@ -259,11 +259,11 @@ func (m *Client) DeleteDocument(ctx context.Context, id string) error {
 func (m *Client) DeleteEmbedding(ctx context.Context, id string) error {
 	collectionName := "chunks"
 	partitionName := "_default"
-	expr := fmt.Sprintf("ID == '%s'", id)
+	expr := fmt.Sprintf("DocumentID == '%s'", id)
 
 	err := m.Instance.Delete(ctx, collectionName, partitionName, expr)
 	if err != nil {
-		return fmt.Errorf("failed to delete embedding by ID: %w", err)
+		return fmt.Errorf("failed to delete embedding by DocumentID: %w", err)
 	}
 
 	return nil

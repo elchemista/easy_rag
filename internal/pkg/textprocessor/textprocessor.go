@@ -9,7 +9,7 @@ import (
 
 func CreateChunks(text string) []string {
 	// Maximum characters per chunk
-	const maxCharacters = 24576 // 8192 tokens * 3 (1 token = 3 caracters)
+	const maxCharacters = 5000 // too slow otherwise
 
 	var chunks []string
 	var currentChunk strings.Builder

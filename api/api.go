@@ -31,4 +31,5 @@ func NewAPI(e *echo.Echo, rag *rag.Rag) {
 	api.POST("/ask", AskDocHandler)
 	api.GET("/docs", ListAllDocsHandler)
 	api.GET("/doc/:id", GetDocHandler)
+	api.DELETE("/doc/:id", DeleteDocHandler)
 }
