@@ -132,5 +132,11 @@ func (m *Milvus) DeleteDocument(id string) error {
 	if err != nil {
 		return err
 	}
+
+	err = m.Client.DeleteEmbedding(ctx, id)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
