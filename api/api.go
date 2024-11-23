@@ -3,7 +3,7 @@ package api
 import (
 	"fmt"
 
-	"github.com/elchemista/easy_rag/internal/pkg/rag"
+	"github.com/MaxwellGroup/ragexp1/internal/pkg/rag"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )

@@ -1,4 +1,4 @@
-module github.com/elchemista/easy_rag
+module github.com/MaxwellGroup/ragexp1
 
 go 1.23.2
 

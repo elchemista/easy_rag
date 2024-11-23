@@ -1,6 +1,6 @@
 package database
 
-import "github.com/elchemista/easy_rag/internal/models"
+import "github.com/MaxwellGroup/ragexp1/internal/models"
 
 // database interface
 

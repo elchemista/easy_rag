@@ -1,9 +1,9 @@
 package rag
 
 import (
-	"github.com/elchemista/easy_rag/internal/database"
-	"github.com/elchemista/easy_rag/internal/embeddings"
-	"github.com/elchemista/easy_rag/internal/llm"
+	"github.com/MaxwellGroup/ragexp1/internal/database"
+	"github.com/MaxwellGroup/ragexp1/internal/embeddings"
+	"github.com/MaxwellGroup/ragexp1/internal/llm"
 )
 
 type Rag struct {
