@@ -1,0 +1,152 @@
+{
+	"info": {
+		"_postman_id": "630b00ab-ba06-475c-95e9-12efc8f5ad6f",
+		"name": "RAG",
+		"description": "RAG Call Example",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "39942344"
+	},
+	"item": [
+		{
+			"name": "docs",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://213.254.5.240:4002/api/v1/docs",
+					"protocol": "http",
+					"host": [
+						"213",
+						"254",
+						"5",
+						"240"
+					],
+					"port": "4002",
+					"path": [
+						"api",
+						"v1",
+						"docs"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "upload",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"docs\": [\n        {\n            \"content\": \"Achieve Robust Information Security with ISO 27001:2022 Our platform empowers your organisation to align with ISO 27001, ensuring comprehensive security management. This international standard is essential for protecting sensitive data and enhancing resilience against cyber threats. With over 70,000 certificates issued globally, ISO 27001's widespread adoption underscores its importance in safeguarding information assets. Why ISO 27001 Matters: Achieving ISO 27001:2022 certification emphasises a comprehensive, risk-based approach to improving information security management, ensuring your organisation effectively manages and mitigates potential threats, aligning with modern security needs. It provides a systematic methodology for managing sensitive information, ensuring it remains secure. Certification can reduce data breach costs by 30% and is recognised in over 150 countries, enhancing international business opportunities and competitive advantage. How ISO 27001 Certification Benefits Your Business. Achieve Cost Efficiency: Save time and money by preventing costly security breaches. Implement proactive risk management measures to significantly reduce the likelihood of incidents. Accelerate Sales Growth: Streamline your sales process by reducing extensive security documentation requests (RFIs). Showcase your compliance with international information security standards to shorten negotiation times and close deals faster. Boost Client Trust: Demonstrate your commitment to information security to enhance client confidence and build lasting trust. Increase customer loyalty and retain clients in sectors like finance, healthcare, and IT services. Comprehensive Guide on How to Implement ISO 27001:2022 Certification. The standard's structure includes a comprehensive Information Security Management System (ISMS) framework and a detailed ISO 27001 implementation guide that integrates risk management processes and Annex A controls. These components create a holistic security strategy, addressing various aspects of security (ISO 27001:2022 Clause 4.2). This approach not only enhances security but also fosters a culture of awareness and compliance within the organisation. Streamlining Certification with ISMS.online. ISMS.online plays a crucial role in facilitating alignment by offering tools that streamline the certification process. Our platform provides automated risk assessments and real-time monitoring, simplifying the implementation of ISO 27001:2022 requirements. This not only reduces manual effort but also enhances efficiency and accuracy in maintaining alignment. Join 25000 + Users Achieving ISO 27001 with ISMS.online. Book Your Free Demo Today! Understanding ISO 27001:2022. ISO 27001 is a pivotal standard for improving an Information Security Management System (ISMS), offering a structured framework to protect sensitive data. This framework integrates comprehensive risk evaluation processes and Annex A controls, forming a robust security strategy. Organisations can effectively identify, analyse, and address vulnerabilities, enhancing their overall security posture. Key Elements of ISO 27001:2022. ISMS Framework: This foundational component establishes systematic policies and procedures for managing information security (ISO 27001:2022 Clause 4.2). It aligns organisational goals with security protocols, fostering a culture of compliance and awareness. Risk Evaluation: Central to ISO 27001, this process involves conducting thorough assessments to identify potential threats. It is essential for implementing appropriate security measures and ensuring continuous monitoring and improvement. ISO 27001 Controls: ISO 27001:2022 outlines a comprehensive set of ISO 27001 controls within Annex A, designed to address various aspects of information security. These controls include measures for access control, cryptography, physical security, and incident management, among others. Implementing these controls ensures your Information Security Management System (ISMS) effectively mitigates risks and safeguards sensitive information. Aligning with International Standards ISO 27001:2022 is developed in collaboration with the International Electrotechnical Commission (IEC), ensuring that the standard aligns with global best practices in information security. This partnership enhances the credibility and applicability of ISO 27001 across diverse industries and regions. How ISO 27001 Integrates with Other Standards ISO 27001:2022 seamlessly integrates with other standards like ISO 9001 for quality management, ISO 27002 for code of practice for information security controls and regulations like GDPR, enhancing compliance and operational efficiency. This integration allows organisations to streamline regulatory efforts and align security practices with broader business objectives. Initial preparation involves a gap analysis to identify areas needing improvement, followed by a risk evaluation to assess potential threats. Implementing Annex A controls ensures comprehensive security measures are in place. The final audit process, including Stage 1 and Stage 2 audits, verifies compliance and readiness for certification. Why Is ISO 27001:2022 Important for Organisations? ISO 27001 plays a vital role in strengthening your organisation's data protection strategies. It provides a comprehensive framework for managing sensitive information, aligning with contemporary cybersecurity requirements through a risk-based approach. This alignment not only fortifies defences but also ensures adherence to regulations like GDPR, mitigating potential legal risks (ISO 27001:2022 Clause 6.1). ISO 27001:2022 Integration with Other Standards ISO 27001 is part of the broader ISO family of management system standards. This allows it to be seamlessly integrated with other standards, such as: ISO 9001 (Quality Management): Align your quality and information security practices to ensure consistent operational standards across both functions. ISO 22301 (Business Continuity): Strengthen your business resilience by integrating security and continuity management into a unified system. ISO 27701 (Privacy Information Management): Protect personal data and ensure GDPR compliance by incorporating ISO 27701 alongside ISO 27001. This integrated approach helps your organisation maintain robust operational standards, streamlining the certification process and enhancing compliance. How Does ISO 27001:2022 Enhance Risk Management? Structured Risk Management: The standard emphasises the systematic identification, assessment, and mitigation of risks, fostering a proactive security posture. Incident Reduction: Organisations experience fewer breaches due to the robust controls outlined in Annex A. Operational Efficiency: Streamlined processes enhance efficiency, reducing the likelihood of costly incidents. Structured Risk Management with ISO 27001:2022 ISO 27001 requires organisations to adopt a comprehensive, systematic approach to risk management. This includes: Risk Identification and Assessment: Identify potential threats to sensitive data and evaluate the severity and likelihood of those risks (ISO 27001:2022 Clause 6.1). Risk Treatment: Select appropriate treatment options, such as mitigating, transferring, avoiding, or accepting risks. With the addition of new options like exploiting and enhancing, organisations can take calculated risks to harness opportunities. Each of these steps must be reviewed regularly to ensure that the risk landscape is continuously monitored and mitigated as necessary. What Are the Benefits for Trust and Reputation? Certification signifies a commitment to data protection, enhancing your business reputation and customer trust. Certified organisations often see a 20% increase in customer satisfaction, as clients appreciate the assurance of secure data handling. How ISO 27001 Certification Impacts Client Trust and Sales Increased Client Confidence: When prospective clients see that your organisation is ISO 27001 certified, it automatically elevates their trust in your ability to protect sensitive information. This trust is essential for sectors where data security is a deciding factor, such as healthcare, finance, and government contracting. Faster Sales Cycles: ISO 27001 certification reduces the time spent answering security questionnaires during the procurement process. Prospective clients will see your certification as a guarantee of high security standards, speeding up decision-making. Competitive Advantage: ISO 27001 certification positions your company as a leader in information security, giving you an edge over competitors who may not hold this certification. How Does ISO 27001:2022 Offer Competitive Advantages? ISO 27001 opens international business opportunities, recognised in over 150 countries. It cultivates a culture of security awareness, positively influencing organisational culture and encouraging continuous improvement and resilience, essential for thriving in today's digital environment. How Can ISO 27001 Support Regulatory Adherence? Aligning with ISO 27001 helps navigate complex regulatory landscapes, ensuring adherence to various legal requirements. This alignment reduces potential legal liabilities and enhances overall governance. Incorporating ISO 27001:2022 into your organisation not only strengthens your data protection framework but also builds a foundation for sustainable growth and trust in the global market. Enhancing Risk Management with ISO 27001:2022 ISO 27001:2022 offers a robust framework for managing information security risks, vital for safeguarding your organisation's sensitive data. This standard emphasises a systematic approach to risk evaluation, ensuring potential threats are identified, assessed, and mitigated effectively. How Does ISO 27001 Structure Risk Management? ISO 27001:2022 integrates risk evaluation into the Information Security Management System (ISMS), involving: Risk Assessment: Conducting thorough evaluations to identify and analyse potential threats and vulnerabilities (ISO 27001:2022 Clause 6.1). Risk Treatment: Implementing strategies to mitigate identified risks, using controls outlined in Annex A to reduce vulnerabilities and threats. Continuous Monitoring: Regularly reviewing and updating practices to adapt to evolving threats and maintain security effectiveness. What Techniques and Strategies Are Key? Effective risk management under ISO 27001:2022 involves: Risk Assessment and Analysis: Utilising methodologies like SWOT analysis and threat modelling to evaluate risks comprehensively. Risk Treatment and Mitigation: Applying controls from Annex A to address specific risks, ensuring a proactive approach to security. Continuous Improvement: Fostering a security-focused culture that encourages ongoing evaluation and enhancement of risk management practices. How Can the Framework Be Tailored to Your Organisation? ISO 27001:2022's framework can be customised to fit your organisation's specific needs, ensuring that security measures align with business objectives and regulatory requirements. By fostering a culture of proactive risk management, organisations with ISO 27001 certification experience fewer security breaches and enhanced resilience against cyber threats. This approach not only protects your data but also builds trust with stakeholders, enhancing your organisation's reputation and competitive edge. Key Changes in ISO 27001:2022 ISO 27001:2022 introduces pivotal updates, enhancing its role in modern cybersecurity. The most significant changes reside in Annex A, which now includes advanced measures for digital security and proactive threat management. These revisions address the evolving nature of security challenges, particularly the increasing reliance on digital platforms. Key Differences Between ISO 27001:2022 and Earlier Versions The differences between the 2013 and 2022 versions of ISO 27001 are crucial to understanding the updated standard. While there are no massive overhauls, the refinements in Annex A controls and other areas ensure the standard remains relevant to modern cybersecurity challenges. Key changes include: Restructuring of Annex A Controls: Annex A controls have been condensed from 114 to 93, with some being merged, revised, or newly added. These changes reflect the current cybersecurity environment, making controls more streamlined and focused. New Focus Areas: The 11 new controls introduced in ISO 27001:2022 include areas such as threat intelligence, physical security monitoring, secure coding, and cloud service security, addressing the rise of digital threats and the increased reliance on cloud-based solutions. Understanding Annex A Controls Enhanced Security Protocols: Annex A now features 93 controls, with new additions focusing on digital security and proactive threat management. These controls are designed to mitigate emerging risks and ensure robust protection of information assets. Digital Security Focus: As digital platforms become integral to operations, ISO 27001:2022 emphasises securing digital environments, ensuring data integrity, and safeguarding against unauthorised access. Proactive Threat Management: New controls enable organisations to anticipate and respond to potential security incidents more effectively, strengthening their overall security posture. Detailed Breakdown of Annex A Controls in ISO 27001:2022 ISO 27001:2022 introduces a revised set of Annex A controls, reducing the total from 114 to 93 and restructuring them into four main groups. Here’s a breakdown of the control categories: New Controls: ISO 27001:2022 introduces 11 new controls focused on emerging technologies and challenges, including: Cloud services: Security measures for cloud infrastructure. Threat intelligence: Proactive identification of security threats. ICT readiness: Business continuity preparations for ICT systems.\",\n            \"link\": \"https://google.com/text.txt\",\n            \"filename\": \"text.txt\",\n            \"category\": \"Test\",\n            \"metadata\": {\n                \"key1\": \"test\"\n            }\n        }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://213.254.5.240:4002/api/v1/upload",
+					"protocol": "http",
+					"host": [
+						"213",
+						"254",
+						"5",
+						"240"
+					],
+					"port": "4002",
+					"path": [
+						"api",
+						"v1",
+						"upload"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://213.254.5.240:4002/api/v1/doc/647c4318-8cd0-4b51-88b2-a443ace14295",
+					"protocol": "http",
+					"host": [
+						"213",
+						"254",
+						"5",
+						"240"
+					],
+					"port": "4002",
+					"path": [
+						"api",
+						"v1",
+						"doc",
+						"647c4318-8cd0-4b51-88b2-a443ace14295"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ask",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"question\": \"What is ISO 27001 ?\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://213.254.5.240:4002/api/v1/ask",
+					"protocol": "http",
+					"host": [
+						"213",
+						"254",
+						"5",
+						"240"
+					],
+					"port": "4002",
+					"path": [
+						"api",
+						"v1",
+						"ask"
+					]
+				},
+				"description": "``` json\n{\"answer\":\"ISO 27001 is an international information technology standard that outlines the requirements for implementing an Information Security Management System (ISMS). It provides a framework for organizations to manage and protect their sensitive data, assets, and systems from various types of cyber threats.\",\"docs\":[\"20644570-f45e-4890-a8c1-d80eccd57aa9\"],\"version\":\"v1\"}\n\n ```"
+			},
+			"response": []
+		},
+		{
+			"name": "doc",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://213.254.5.240:4002/api/v1/doc/647c4318-8cd0-4b51-88b2-a443ace14295",
+					"protocol": "http",
+					"host": [
+						"213",
+						"254",
+						"5",
+						"240"
+					],
+					"port": "4002",
+					"path": [
+						"api",
+						"v1",
+						"doc",
+						"647c4318-8cd0-4b51-88b2-a443ace14295"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
