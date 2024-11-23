@@ -184,7 +184,7 @@ func (m *Client) Search(ctx context.Context, vectors [][]float32, topK int) ([]m
 	}
 
 	// Perform the search
-	searchResults, err := m.Instance.Search(ctx, collectionName, nil, "", projections, searchVectors, "Vector", metricType, topK, searchParams)
+	searchResults, err := m.Instance.Search(ctx, collectionName, nil, "", projections, searchVectors, "Vector", metricType, topK, searchParams, client.WithLimit(10))
 	if err != nil {
 		return nil, fmt.Errorf("failed to search collection: %w", err)
 	}
