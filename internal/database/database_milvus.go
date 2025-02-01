@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"sort"
 
-	"github.com/MaxwellGroup/ragexp1/internal/models"
-	"github.com/MaxwellGroup/ragexp1/internal/pkg/database/milvus"
+	"github.com/elchemista/easy_rag/internal/models"
+	"github.com/elchemista/easy_rag/internal/pkg/database/milvus"
 )
 
 // implement database interface for milvus

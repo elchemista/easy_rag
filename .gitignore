@@ -2,4 +2,5 @@
 *.sum
 id_rsa2
 id_rsa2.pub
+/tests/RAG.postman_collection.json
 /volumes/

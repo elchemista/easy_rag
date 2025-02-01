@@ -5,9 +5,9 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/MaxwellGroup/ragexp1/internal/models"
-	"github.com/MaxwellGroup/ragexp1/internal/pkg/rag"
-	"github.com/MaxwellGroup/ragexp1/internal/pkg/textprocessor"
+	"github.com/elchemista/easy_rag/internal/models"
+	"github.com/elchemista/easy_rag/internal/pkg/rag"
+	"github.com/elchemista/easy_rag/internal/pkg/textprocessor"
 	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
 )

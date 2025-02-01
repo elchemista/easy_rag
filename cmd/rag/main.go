@@ -1,12 +1,12 @@
 package main
 
 import (
-	"github.com/MaxwellGroup/ragexp1/api"
-	"github.com/MaxwellGroup/ragexp1/config"
-	"github.com/MaxwellGroup/ragexp1/internal/database"
-	"github.com/MaxwellGroup/ragexp1/internal/embeddings"
-	"github.com/MaxwellGroup/ragexp1/internal/llm"
-	"github.com/MaxwellGroup/ragexp1/internal/pkg/rag"
+	"github.com/elchemista/easy_rag/api"
+	"github.com/elchemista/easy_rag/config"
+	"github.com/elchemista/easy_rag/internal/database"
+	"github.com/elchemista/easy_rag/internal/embeddings"
+	"github.com/elchemista/easy_rag/internal/llm"
+	"github.com/elchemista/easy_rag/internal/pkg/rag"
 	"github.com/labstack/echo/v4"
 )
 
